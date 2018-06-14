@@ -1,0 +1,1001 @@
+/*--------------------------------------*/
+/* King of the Deer						*/
+/* JUN 13 2018							*/
+/* require userpatch 1.5				*/
+/* created by xthomas					*/
+/*--------------------------------------*/
+/*--------------------------------------*/
+/* Start Script							*/
+/*--------------------------------------*/
+<PLAYER_SETUP>
+direct_placement
+
+#const AT_TEAM 2
+#const SET_ATTRIBUTE   0    /* Type: Attribute Const */
+#const ATTR_HITPOINTS 0
+
+effect_amount SET_ATTRIBUTE DIRE_WOLF ATTR_HITPOINTS 0
+
+#const GAIA_SET_ATTRIBUTE -1
+#const DEER_CLASS 909
+#const ATTR_TERRAIN_ID 53
+#const GAIA_UPGRADE_UNIT     -4
+
+effect_amount GAIA_SET_ATTRIBUTE DEER_CLASS ATTR_TERRAIN_ID 0
+
+/*--------------------------------------*/
+/* Define Lands							*/
+/*--------------------------------------*/
+if 1_PLAYER_GAME
+	start_random
+		percent_chance 50
+			#define LAND1
+		percent_chance 50
+			#define LAND2
+	end_random
+elseif 2_PLAYER_GAME
+	#define LAND1
+	#define LAND2
+elseif 3_PLAYER_GAME
+	#define LAND1
+	#define LAND2
+	start_random
+		percent_chance 50
+			#define LAND3
+		percent_chance 50
+			#define LAND4
+	end_random
+elseif 4_PLAYER_GAME
+	#define LAND1
+	#define LAND2
+	#define LAND3
+	#define LAND4
+elseif 5_PLAYER_GAME
+	#define LAND1
+	#define LAND2
+	#define LAND3
+	#define LAND4
+	start_random
+		percent_chance 50
+			#define LAND5
+		percent_chance 50
+			#define LAND6
+	end_random
+elseif 6_PLAYER_GAME
+	#define LAND1
+	#define LAND2
+	#define LAND3
+	#define LAND4
+	#define LAND5
+	#define LAND6
+elseif 7_PLAYER_GAME
+	#define LAND1
+	#define LAND2
+	#define LAND3
+	#define LAND4
+	#define LAND5
+	#define LAND6
+	start_random
+		percent_chance 50
+			#define LAND7
+		percent_chance 50
+			#define LAND8
+	end_random
+elseif 8_PLAYER_GAME
+	#define LAND1
+	#define LAND2
+	#define LAND3
+	#define LAND4
+	#define LAND5
+	#define LAND6
+	#define LAND7
+	#define LAND8
+endif
+
+/*--------------------------------------*/
+/* roll map terrain						*/
+/*--------------------------------------*/
+start_random	
+	percent_chance 0
+	#define SNOW_MAP
+	#define ICE_MAP
+	percent_chance 0
+	#define SNOW_MAP
+	percent_chance 0
+	#define AFRICA_MAP
+	percent_chance 100
+	#define JUNGLE_MAP
+	percent_chance 0
+	#define FOREST_MAP
+end_random
+
+/*--------------------------------------*/
+/* reserved:							*/
+/* WATER|SHALLOW|DESERT|DIRT|DIRT[2-3]	*/
+/*--------------------------------------*/
+
+
+/*--------------------------------------*/
+/* Define Terrain						*/
+/*--------------------------------------*/
+/* 
+ * important! reserve 
+ * DIRT DIRT2 DIRT3 DESERT SHALLOW 
+ * for Deer Lands, left corner, base terrain
+ */
+
+/* note: middle terrain used so no forest goes in middle */
+/* does not actually show in game */
+if ICE_MAP
+	#const PLAYER_TERRAIN_TYPE 32 /*--SNOW--*/
+	#const MIDDLE_TERRAIN 33 /*--DIRT_SNOW--*/
+	#const FOREST_TERRAIN 21 /*--SNOW_FOREST--*/
+	#const FOREST_BASE_TERRAIN 34 /*--GRASS_SNOW--*/
+	#const CONNECTION_TERRAIN_TYPE 34 /*--GRASS_SNOW--*/
+	#const TREEA 413 /*--SNOWPINETREE--*/
+	#const TREEB 413
+	#const TREEC 413
+	#const TREED 350 /*--PINETREE--*/
+elseif SNOW_MAP
+	#const PLAYER_TERRAIN_TYPE 32 /*--SNOW--*/
+	#const MIDDLE_TERRAIN 33 /*--DIRT_SNOW--*/
+	#const FOREST_TERRAIN 21 /*--SNOW_FOREST--*/
+	#const FOREST_BASE_TERRAIN 34 /*--GRASS_SNOW--*/
+	#const CONNECTION_TERRAIN_TYPE 34 /*--GRASS_SNOW--*/
+	#const TREEA 413 /*--SNOWPINETREE--*/
+	#const TREEB 413
+	#const TREEC 413
+	#const TREED 350 /*--PINETREE--*/
+elseif JUNGLE_MAP
+	#const PLAYER_TERRAIN_TYPE 12 /*--GRASS2--*/
+	#const MIDDLE_TERRAIN 0 /*--GRASS--*/
+	#const FOREST_TERRAIN 17 /*--JUNGLE--*/
+	#const FOREST_BASE_TERRAIN 5 /*--LEAVES--*/
+	#const CONNECTION_TERRAIN_TYPE 5 /*--LEAVES--*/
+	#const TREEA 414 /*--JUNGLETREE--*/
+	#const TREEB 414
+	#const TREEC 414
+	#const TREED 414
+elseif FOREST_MAP
+	#const PLAYER_TERRAIN_TYPE 0 /*--GRASS--*/
+	#const MIDDLE_TERRAIN 12 /*--GRASS2--*/
+	#const FOREST_TERRAIN 10 /*--FOREST--*/
+	#const FOREST_BASE_TERRAIN 5 /*--LEAVES--*/
+	#const CONNECTION_TERRAIN_TYPE 5 /*--LEAVES--*/
+	#const TREEA 414 /*--JUNGLETREE--*/
+	#const TREEB 414
+	#const TREEC 414
+	#const TREED 414
+elseif AFRICA_MAP
+	#const PLAYER_TERRAIN_TYPE 14 /*--SAVANNAH WK--*/
+	#const MIDDLE_TERRAIN 33 /*--DIRT_SNOW--*/
+	start_random
+		percent_chance 33
+		#const FOREST_TERRAIN 21 /*--DRAGONFOREST WK--*/
+		percent_chance 33
+		#const FOREST_TERRAIN 41 /*--ACACIA_FOREST WK--*/
+		percent_chance 34
+		#const FOREST_TERRAIN 10 /*--DLC_RAINFOREST WK--*/
+	end_random
+	#const FOREST_BASE_TERRAIN 5 /*--LEAVES--*/
+	#const CONNECTION_TERRAIN_TYPE 5 /*--LEAVES--*/
+	#const TREEA 414 /*--JUNGLETREE--*/
+	#const TREEB 414
+	#const TREEC 414
+	#const TREED 414
+elseif MANGROVE_MAP
+
+endif
+
+
+<LAND_GENERATION>
+
+base_terrain SHALLOW
+
+
+/*--------------------------------------*/
+/* Deer run here						*/
+/*--------------------------------------*/
+#const MARUMARU_TERRAIN 4 /*--SHALLOW--*/
+create_land
+{
+	land_position 0 0
+	terrain_type MARUMARU_TERRAIN
+	land_percent 100
+	base_size 14
+	border_fuzziness 6
+	zone 1
+	left_border 0
+	right_border 71
+	top_border 0
+	bottom_border 71
+}
+/*--------------------------------------*/
+/* create middle						*/
+/*--------------------------------------*/
+/* replace with MIDDLE_TERRAIN after cliffs are placed */
+create_land
+{
+	land_position 40 40
+	top_border 30
+	bottom_border 45
+	left_border 30
+	right_border 45
+	land_percent 7
+	terrain_type MED_WATER
+	border_fuzziness 1
+	other_zone_avoidance_distance 0
+	land_id 10
+	zone 1
+}
+/*--------------------------------------*/
+/* OLD Deer Lands						*/
+/*--------------------------------------*/
+	create_land
+	{
+	    terrain_type WATER
+	    land_percent 1
+	    	land_position 99 13
+	    top_border 0
+	    left_border 99
+	    right_border 0
+	    bottom_border 99
+	    clumping_factor 15
+	    land_id 15
+	    other_zone_avoidance_distance 10
+	    zone 15
+        base_size 8
+	}
+	create_land
+	{
+	    terrain_type WATER
+	    land_percent 1
+	    	land_position 13 99
+	    top_border 0
+	    left_border 99
+	    right_border 0
+	    bottom_border 99
+	    clumping_factor 15
+	    land_id 15
+	    other_zone_avoidance_distance 10
+	    zone 15
+        base_size 8
+	}
+
+/*--------------------------------------*/
+/* Cliff Lands							*/
+/*--------------------------------------*/
+create_land
+{
+	terrain_type FOREST_TERRAIN
+	land_percent 100
+	land_position 99 99
+	other_zone_avoidance_distance 10
+	zone 1
+}
+
+/*--------------------------------------*/
+/* Players								*/
+/*--------------------------------------*/
+if 2_TEAM_GAME
+	start_random
+		percent_chance 50
+			#define TEAM_ONE_TWO
+		percent_chance 50
+			#define TEAM_TWO_ONE
+	end_random
+endif
+
+/* So player lands will be created using DEEP_WATER first
+ * That way cliffs cannot be placed on them
+ * after cliffs are placed they are converted to PLAYER_TERRAIN_TYPE
+ */
+
+if LAND1
+	create_land
+	{
+		if 2_PLAYER_GAME
+			land_position rnd(38,76) rnd(12,14)
+		elseif 4_PLAYER_GAME
+			land_position rnd(38,52) rnd(12,14)
+		else
+	    	land_position rnd(38,40) rnd(12,14)
+		endif
+	    terrain_type DEEP_WATER
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 1 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 2 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+if LAND2
+	create_land
+	{
+		if 2_PLAYER_GAME
+			land_position rnd(12,14) rnd(38,72)
+		elseif 4_PLAYER_GAME
+			land_position rnd(12,14) rnd(38,54)
+		else
+			land_position rnd(12,14) rnd(38,40)
+		endif
+	    terrain_type DEEP_WATER
+	    zone 1
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 2 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 1 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+if LAND3
+	create_land
+	{
+		if 4_PLAYER_GAME
+			land_position rnd(63,76) rnd(12,14)
+		else
+			land_position rnd(51,52) rnd(12,14)
+		endif
+	    terrain_type DEEP_WATER
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 1 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 2 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+if LAND4
+	create_land
+	{
+		if 4_PLAYER_GAME
+			land_position rnd(12,14) rnd(63,76)
+		else
+			land_position rnd(12,14) rnd(51,52)
+		endif
+	    terrain_type DEEP_WATER
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 2 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 1 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+if LAND5
+	create_land
+	{
+		land_position rnd(63,64) rnd(12,14)
+	    terrain_type DEEP_WATER
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 1 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 2 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+if LAND6
+	create_land
+	{
+		land_position rnd(12,14) rnd(63,64)
+	    terrain_type DEEP_WATER
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 2 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 1 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+if LAND7
+	create_land
+	{
+		land_position rnd(75,76) rnd(12,14)
+	    terrain_type DEEP_WATER
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 1 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 2 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+if LAND8
+	create_land
+	{
+		land_position rnd(12,14) rnd(75,76)
+	    terrain_type DEEP_WATER
+	    other_zone_avoidance_distance 10
+	    zone 1
+	    if TEAM_ONE_TWO
+	    	assign_to AT_TEAM 2 0 0
+	    elseif TEAM_TWO_ONE
+	    	assign_to AT_TEAM 1 0 0
+	    else
+			assign_to AT_TEAM -10 0 0
+		endif
+		base_size	9
+	}
+endif
+
+
+<CLIFF_GENERATION>
+min_number_of_cliffs 200
+max_number_of_cliffs 1000
+min_length_of_cliff 5
+max_length_of_cliff 5
+min_terrain_distance 0
+min_distance_cliffs 1
+<TERRAIN_GENERATION>
+/*--------------------------------------*/
+/* Deer Islands							*/
+/*--------------------------------------*/
+/* 	First Deer Wave 		DESERT  	*/
+/* 	Second Deer Wave 		DIRT 		*/
+/* 	Third Deer Wave 		DIRT2 		*/
+/* 	Fourth Deer Wave 		DIRT3 		*/
+create_terrain DESERT
+{
+	base_terrain WATER
+	spacing_to_other_terrain_types 1
+	number_of_clumps 99
+	land_percent 99
+}
+create_terrain DIRT
+{
+	base_terrain DESERT
+	spacing_to_other_terrain_types 2
+	number_of_clumps 99
+	land_percent 99
+}
+create_terrain DIRT2 
+{
+	base_terrain DIRT
+	spacing_to_other_terrain_types 1
+	number_of_clumps 99
+	land_percent 99
+}
+create_terrain DIRT3 
+{
+	base_terrain DIRT2
+	spacing_to_other_terrain_types 1
+	number_of_clumps 99
+	land_percent 99
+}
+create_terrain JUNGLE
+{
+	base_terrain DIRT3
+	spacing_to_other_terrain_types 1
+	number_of_clumps 99
+	land_percent 99
+}
+/*--------------------------------------*/
+/* create middle after cliffs			*/
+/*--------------------------------------*/
+create_terrain MIDDLE_TERRAIN
+{
+	base_terrain MED_WATER
+	number_of_clumps 99
+	land_percent 99
+}
+
+/*--------------------------------------*/
+/* Water Patches						*/
+/*--------------------------------------*/
+create_terrain MED_WATER
+{
+	base_terrain SHALLOW
+	number_of_clumps 45
+	land_percent 3
+	spacing_to_other_terrain_types 2
+}
+endif
+create_terrain WATER
+{
+	base_terrain SHALLOW
+	number_of_clumps 30
+	land_percent 3
+}
+
+if ICE_MAP
+create_terrain ICE
+{
+	base_terrain SHALLOW
+	number_of_clumps 10
+	land_percent 20
+}
+endif
+
+/*--------------------------------------*/
+/* Main Terrain (placed after cliffs)	*/
+/*--------------------------------------*/
+create_terrain PLAYER_TERRAIN_TYPE
+{
+	base_terrain DEEP_WATER
+	land_percent 99
+	number_of_clumps 99
+}
+
+/*--------------------------------------*/
+/* Main Forest							*/
+/*--------------------------------------*/
+create_terrain FOREST_BASE_TERRAIN
+{
+	base_terrain PLAYER_TERRAIN_TYPE
+	land_percent 99
+	number_of_clumps 99
+	set_avoid_player_start_areas
+}
+create_terrain FOREST_TERRAIN
+{
+	base_terrain FOREST_BASE_TERRAIN
+	spacing_to_other_terrain_types 7
+	land_percent 99
+	number_of_clumps 99
+	set_avoid_player_start_areas
+}
+
+/*--------------------------------------*/
+/* Main Terrain							*/
+/*--------------------------------------*/
+create_terrain PLAYER_TERRAIN_TYPE
+{
+	base_terrain FOREST_BASE_TERRAIN
+	number_of_clumps 99
+	land_percent 99
+}
+<OBJECTS_GENERATION>
+/*--------------------------------------*/
+/* Deer									*/
+/*--------------------------------------*/
+/* First Deer Wave  	DESERT	 		*/
+/* Second Deer Wave  	DIRT 	 		*/
+/* Third Deer Wave  	DIRT2 	 		*/
+/* Fourth Deer Wave  	DIRT3 			*/
+/* on HUGE and GIGANTIC the base is 9x13 instead of 8x13 */
+
+create_object DIRE_WOLF
+{
+	number_of_groups 2
+	if HUGE_MAP
+		number_of_objects 29
+	elseif GIGANTIC_MAP
+		number_of_objects 29
+	else
+		number_of_objects 27
+	endif
+	group_placement_radius 20
+	temp_min_distance_group_placement 20
+	terrain_to_place_on DESERT
+    resource_delta 80
+	place_on_specific_land_id 15
+}
+create_object DIRE_WOLF
+{
+	number_of_groups 2
+	if HUGE_MAP
+		number_of_objects 29
+	elseif GIGANTIC_MAP
+		number_of_objects 29
+	else
+		number_of_objects 23
+	endif
+	group_placement_radius 20
+	temp_min_distance_group_placement 20
+	terrain_to_place_on DIRT
+    resource_delta 160
+	place_on_specific_land_id 15
+}
+	create_object DIRE_WOLF
+	{
+		number_of_groups 2
+		if HUGE_MAP
+			number_of_objects 21
+		elseif GIGANTIC_MAP
+			number_of_objects 21
+		else
+			number_of_objects 21
+		endif
+		group_placement_radius 20
+		temp_min_distance_group_placement 20
+		terrain_to_place_on DIRT2
+    	resource_delta 320
+		place_on_specific_land_id 15
+	}
+		create_object DIRE_WOLF
+		{
+			number_of_groups 2
+			if HUGE_MAP
+				number_of_objects 17
+			elseif GIGANTIC_MAP
+				number_of_objects 17
+			else
+				number_of_objects 15
+			endif			
+			group_placement_radius 20
+			temp_min_distance_group_placement 20
+			terrain_to_place_on DIRT3
+		    resource_delta 328
+			place_on_specific_land_id 15
+		}
+		
+/* first wave */
+	create_object DEER 				
+	{
+		number_of_groups 2
+		if TINY_MAP
+			number_of_objects 1
+		elseif SMALL_MAP
+			number_of_objects 2
+		elseif MEDIUM_MAP
+			number_of_objects 2
+		elseif LARGE_MAP
+			number_of_objects 3
+		elseif HUGE_MAP
+			number_of_objects 4
+		elseif GIGANTIC_MAP
+			number_of_objects 11
+		endif
+		group_placement_radius 20
+		temp_min_distance_group_placement 20
+		terrain_to_place_on DESERT
+	}
+/* second wave */
+	create_object DEER 				
+	{
+		number_of_groups 2
+		if TINY_MAP
+			number_of_objects 1
+		elseif SMALL_MAP
+			number_of_objects 2
+		elseif MEDIUM_MAP
+			number_of_objects 2
+		elseif LARGE_MAP
+			number_of_objects 3
+		elseif HUGE_MAP
+			number_of_objects 4
+		elseif GIGANTIC_MAP
+			number_of_objects 11
+		endif
+		group_placement_radius 20
+		temp_min_distance_group_placement 20
+		terrain_to_place_on DIRT
+	}
+/* third wave */
+	create_object DEER 
+	{
+		number_of_groups 2
+		if TINY_MAP
+			number_of_objects 1
+		elseif SMALL_MAP
+			number_of_objects 2
+		elseif MEDIUM_MAP
+			number_of_objects 2
+		elseif LARGE_MAP
+			number_of_objects 3
+		elseif HUGE_MAP
+			number_of_objects 4
+		elseif GIGANTIC_MAP
+			number_of_objects 11
+		endif
+		group_placement_radius 20
+		temp_min_distance_group_placement 20
+		terrain_to_place_on DIRT2
+	}
+/* fourth wave */
+	create_object DEER
+	{
+		number_of_groups 2
+		if TINY_MAP
+			number_of_objects 2
+		elseif SMALL_MAP
+			number_of_objects 3
+		elseif MEDIUM_MAP
+			number_of_objects 4
+		elseif LARGE_MAP
+			number_of_objects 6
+		elseif HUGE_MAP
+			number_of_objects 8
+		elseif GIGANTIC_MAP
+			number_of_objects 11
+		endif
+		group_placement_radius 20
+		temp_min_distance_group_placement 20
+		terrain_to_place_on DIRT3
+	}
+/*--------------------------------------*/
+/* Player Objects						*/
+/*--------------------------------------*/
+create_object TOWN_CENTER
+{
+    set_place_for_every_player
+    min_distance_to_players 0
+    max_distance_to_players 0
+}
+create_object VILLAGER
+{
+    set_place_for_every_player
+    min_distance_to_players 6
+    max_distance_to_players 6
+}
+create_object SCOUT
+{
+    set_place_for_every_player
+    min_distance_to_players 7
+    max_distance_to_players 9
+}
+/* SPECIAL STUFF FOR REGICIDE */
+if REGICIDE
+create_object KING
+{
+	set_place_for_every_player
+	min_distance_to_players			6
+	max_distance_to_players			6
+}
+endif
+
+create_object RELIC
+{
+	number_of_objects				5
+	terrain_to_place_on MIDDLE_TERRAIN
+	temp_min_distance_group_placement 7
+}
+
+/*--------------------------------------*/
+/* Near Food							*/
+/*--------------------------------------*/
+create_object SHEEP
+{
+   number_of_objects 4
+   set_loose_grouping
+   set_gaia_object_only
+   set_place_for_every_player
+   min_distance_to_players    9
+   max_distance_to_players    11
+} 
+create_object FORAGE
+{
+  number_of_objects          6
+  group_placement_radius     3
+  set_tight_grouping
+  set_gaia_object_only
+  set_place_for_every_player
+  min_distance_to_players    10
+  max_distance_to_players    12
+  min_distance_group_placement  6
+}
+create_object BOAR
+{
+	number_of_objects				1
+	set_loose_grouping	/* loose grouping, only 1 object? */
+	set_gaia_object_only
+	set_place_for_every_player
+	min_distance_to_players			16
+	max_distance_to_players			18
+}
+create_object BOAR
+{
+	number_of_objects				1
+	set_gaia_object_only
+	set_place_for_every_player
+	min_distance_to_players			14
+	max_distance_to_players			20
+}
+
+/*--------------------------------------*/
+/* Extra Sheep							*/
+/*--------------------------------------*/
+create_object SHEEP
+{
+   number_of_objects 2
+   number_of_groups 2
+   set_loose_grouping
+   set_gaia_object_only
+   set_place_for_every_player
+   min_distance_to_players    14
+   max_distance_to_players    30
+   min_distance_group_placement 5
+}
+
+/*--------------------------------------*/
+/* Gold									*/
+/*--------------------------------------*/
+create_object GOLD
+{
+	number_of_objects          7
+	group_placement_radius     3
+	set_tight_grouping
+	set_gaia_object_only
+	set_place_for_every_player
+	min_distance_to_players    12
+	max_distance_to_players    16
+	min_distance_group_placement  5
+}
+/* MEDIUM GOLD */
+
+create_object GOLD
+{
+     number_of_objects 4
+     group_placement_radius 3
+     set_tight_grouping
+     set_gaia_object_only
+     set_place_for_every_player
+     min_distance_to_players 18
+     max_distance_to_players 26
+     terrain_to_place_on PLAYER_TERRAIN_TYPE
+}
+/* FAR GOLD */
+
+create_object GOLD
+{
+     number_of_objects 4
+     group_placement_radius 3
+     set_tight_grouping
+     set_gaia_object_only
+     set_place_for_every_player
+     min_distance_to_players 25
+     max_distance_to_players 35
+     terrain_to_place_on PLAYER_TERRAIN_TYPE
+}
+
+/*--------------------------------------*/
+/* Stone								*/
+/*--------------------------------------*/
+create_object STONE
+{
+	number_of_objects          5
+	group_placement_radius     2  
+	set_tight_grouping 
+	set_gaia_object_only
+	set_place_for_every_player
+	min_distance_to_players    14
+	max_distance_to_players    18
+	min_distance_group_placement  5
+}
+/* FAR STONE */
+
+create_object STONE
+{
+     number_of_objects 4
+     group_placement_radius 2
+     set_tight_grouping
+     set_gaia_object_only
+     set_place_for_every_player
+     min_distance_to_players 20
+     max_distance_to_players 26
+     terrain_to_place_on PLAYER_TERRAIN_TYPE
+}
+
+/*--------------------------------------*/
+/* Trees								*/
+/*--------------------------------------*/
+create_object TREEA
+{
+	number_of_objects             2
+	set_gaia_object_only
+	set_place_for_every_player
+	min_distance_to_players       4
+	max_distance_to_players       5
+	min_distance_group_placement  2
+}
+create_object TREEB
+{
+	number_of_objects             3
+	set_gaia_object_only
+	set_place_for_every_player
+	min_distance_to_players       6
+	max_distance_to_players       8
+	min_distance_group_placement  2
+}
+create_object TREEC
+{
+	number_of_objects             49
+	min_distance_group_placement  6
+	set_scaling_to_map_size
+}
+/*--------------------------------------*/
+/* Birds								*/
+/*--------------------------------------*/
+create_object HAWK
+{
+   number_of_objects         10
+   set_scaling_to_map_size
+}
+
+/*--------------------------------------*/
+/* FISH Food 							*/
+/*--------------------------------------*/
+create_object FISH
+{
+	temp_min_distance_group_placement 2
+	number_of_objects 8
+	set_gaia_object_only
+   	set_scaling_to_map_size
+} 
+create_object SHORE_FISH
+{
+	temp_min_distance_group_placement 2
+	number_of_objects 10
+	set_gaia_object_only
+   	set_scaling_to_map_size
+} 
+
+<CONNECTION_GENERATION>
+
+create_connect_team_lands
+{
+	replace_terrain PLAYER_TERRAIN_TYPE ROAD
+}
+
+create_connect_all_lands
+{
+	replace_terrain FOREST_TERRAIN CONNECTION_TERRAIN_TYPE
+	replace_terrain FOREST_BASE_TERRAIN CONNECTION_TERRAIN_TYPE
+	terrain_cost FOREST_TERRAIN 1
+	terrain_cost FOREST_BASE_TERRAIN 4
+}
+
+<ELEVATION_GENERATION>
+
+create_elevation 5
+{
+	base_terrain FOREST_TERRAIN /*--cliff--*/
+	number_of_tiles 1000
+	number_of_clumps 10  /* about 100 tiles per hill */
+	set_scale_by_size  /* both total size and number of hills scale with map */
+	set_scale_by_groups  /* so bigger maps have more hills, of same size */
+}
+create_elevation 3
+{
+	base_terrain MED_WATER /*--middle--*/
+	number_of_tiles 100
+	number_of_clumps 5  /* about 100 tiles per hill */
+	set_scale_by_size  /* both total size and number of hills scale with map */
+	set_scale_by_groups  /* so bigger maps have more hills, of same size */
+}
+create_elevation 2
+{
+	base_terrain DEEP_WATER /*--player--*/
+	number_of_tiles 250
+	number_of_clumps 10  /* about 100 tiles per hill */
+	set_scale_by_size  /* both total size and number of hills scale with map */
+	set_scale_by_groups  /* so bigger maps have more hills, of same size */
+}
